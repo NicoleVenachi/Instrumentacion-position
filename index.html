@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <title>
+                Position
+            </title>
+
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        </head>
+        <body>
+
+
+            <script>
+                const API_URL = 'https://coplant.onrender.com/position'
+                function getLocation(){
+
+                    navigator.geolocation.getCurrentPosition(onSuccess);
+                    console.log(a);
+                }
+                getLocation();
+
+                function onSuccess(position){ //Recibe la posición
+                    lat = position.coords.latitude;
+                    long = position.coords.longitude;
+
+                    //console.log(lat, long);
+                    fetchData(lat, long);
+                }
+                function fetchData(lat, long) {
+                    fetch(API_URL,
+                            {
+                                mode: 'cors',
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    "POSITION": {
+                                        "Lat": lat,
+                                        "Long": long
+                                    }
+                                })
+                            })
+                            .then(rawData => rawData.json())
+                            .then(data => data.body)
+                            .then(data => {
+                                
+                                alert('Position updated', 'success')
+                            })
+                            .catch(err => {
+                                alert('Server connection error', 'error')
+                            })
+                    
+                }
+
+                function alert(text, icon){
+                    Swal.fire({
+                        title: text,
+                        icon: icon,
+                        showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    })
+                }
+
+            </script>
+            
+        </body>
+
+
+</html>
